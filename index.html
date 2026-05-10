@@ -1286,11 +1286,12 @@
       text-transform: uppercase;
     }
 
+    /* Una columna: cada diagrama usa todo el ancho de la card (meet ya no queda limitado por mitades estrechas). */
     .nesting-compare {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       align-items: stretch;
-      gap: clamp(1.25rem, 2vw, 1.75rem);
+      gap: clamp(1rem, 2vw, 1.35rem);
       width: 100%;
       height: 100%;
       min-height: 0;
@@ -1299,7 +1300,7 @@
       display: flex;
       flex-direction: column;
       min-height: 0;
-      padding: 24px;
+      padding: clamp(14px, 2vw, 20px) clamp(16px, 2.5vw, 24px);
       background: var(--cs-white);
       border: 1px solid var(--cs-rule);
     }
@@ -1309,16 +1310,32 @@
     }
     .nesting-compare__col svg {
       width: 100%;
-      height: 100%;
-      flex: 1 1 auto;
-      min-height: 0;
+      height: auto;
+      flex: 0 0 auto;
+      min-height: clamp(130px, 26vw, 210px);
+      max-height: none;
       overflow: visible;
       display: block;
+    }
+    .nesting-compare__col svg .diag__t {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+    }
+    .nesting-compare__col svg .diag__s {
+      font-size: 10px;
+      letter-spacing: 0.03em;
+    }
+    .nesting-compare__col svg .diag__arrow,
+    .nesting-compare__col svg .diag__arrow-h {
+      stroke-width: 2;
+    }
+    .nesting-compare__col svg .diag__arrow--dashed {
+      stroke-width: 1.75;
     }
     .nesting-compare__label {
       display: block;
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.14em;
       color: var(--cs-mid);
       margin-bottom: 8px;
@@ -1332,7 +1349,6 @@
     }
     @media (max-width: 640px) {
       .entregables { grid-template-columns: 1fr; }
-      .nesting-compare { grid-template-columns: 1fr; }
     }
 
     /* =========================================================================
@@ -2228,13 +2244,13 @@
             <div class="nesting-compare">
               <div class="nesting-compare__col nesting-compare__col--before">
                 <span class="nesting-compare__label">Antes</span>
-                <svg viewBox="0 0 200 90" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <svg viewBox="4 22 192 62" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
                   <rect class="diag__node" x="6" y="30" width="60" height="30"/>
                   <text class="diag__t" x="36" y="48" text-anchor="middle">GEOMETRÍA</text>
                   <text class="diag__s" x="36" y="58" text-anchor="middle">variable</text>
                   <path class="diag__arrow diag__arrow--dashed" d="M68 45 Q 80 45 92 45"/>
                   <g class="manual-loop">
-                    <circle cx="104" cy="45" r="14" fill="none" stroke="#7B9AA8" stroke-width="1" stroke-dasharray="2 2"/>
+                    <circle cx="104" cy="45" r="14" fill="none" stroke="#7B9AA8" stroke-width="1.25" stroke-dasharray="2 2"/>
                     <text class="diag__t" x="104" y="48" text-anchor="middle" fill="#7B9AA8">manual</text>
                   </g>
                   <path class="diag__arrow diag__arrow--dashed" d="M118 45 Q 130 45 142 45"/>
@@ -2245,7 +2261,7 @@
               </div>
               <div class="nesting-compare__col nesting-compare__col--after">
                 <span class="nesting-compare__label nesting-compare__label--after">Después</span>
-                <svg viewBox="0 0 200 90" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <svg viewBox="4 20 192 64" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
                   <rect class="diag__node" x="6" y="30" width="50" height="30"/>
                   <text class="diag__t" x="31" y="48" text-anchor="middle">DIM.</text>
                   <text class="diag__s" x="31" y="58" text-anchor="middle">input</text>
