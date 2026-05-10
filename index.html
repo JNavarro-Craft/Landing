@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Crafting Systems — Ingeniería de software para automatización e integración diseño–fabricación en AEC y fabricación digital." />
+  <title>Crafting Systems · Automatización e integración diseño–fabricación</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =========================================================================
+       SISTEMA — Crafting Systems (v2)
+       Aesthetic direction (declared up-front):
+       Documento de ingeniería. IBM Plex Sans + Plex Mono + Plex Serif (cursiva
+       para énfasis manuscrito). Fondo papel-plano off-white. Reglas hairline,
+       códigos en mono (FIG.01 / 01-A), naranja usado solamente como acento
+       del "sistema" / automatización. Sin gradientes, sin íconos genéricos,
+       sin sombras dramáticas.
+       ========================================================================= */
+    :root {
+      /* Paleta marca (obligatoria) */
+      --cs-dark: #3D5059;
+      --cs-mid: #7B9AA8;
+      --cs-light: #DCE8EC;
+      --cs-orange: #F5A800;
+      --cs-orange2: #E07800;
+      --cs-white: #FFFFFF;
+
+      /* Apoyo */
+      --cs-paper: #FAFAF7;
+      --cs-text: #1C2B30;
+      --cs-text-2: #4A5C66;
+      --cs-rule: rgba(28, 43, 48, 0.14);
+      --cs-rule-strong: rgba(28, 43, 48, 0.32);
+
+      --max: 1320px;
+      --pad: clamp(1.25rem, 4vw, 2.75rem);
+      --gutter: clamp(1.5rem, 3vw, 2.25rem);
+
+      --sans: "IBM Plex Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+      --serif: "IBM Plex Serif", Georgia, serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      font-size: 16.5px;
+      line-height: 1.55;
+      color: var(--cs-text);
+      background: var(--cs-paper);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; }
+
+    /* ---------- Wrap ---------- */
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding-left: var(--pad);
+      padding-right: var(--pad);
+    }
+
+    /* ---------- Mono labels (códigos, etiquetas técnicas) ---------- */
+    .mono {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--cs-text-2);
+    }
+
+    .mono--orange { color: var(--cs-orange2); }
+    .mono--dark { color: var(--cs-dark); }
+
+    /* ---------- Reveal animation ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* =========================================================================
+       TOP UTILITY BAR + HEADER
+       ========================================================================= */
+    .util {
+      background: var(--cs-dark);
+      color: var(--cs-light);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .util__inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 8px var(--pad);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .util__left { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .util__left span:not(:last-child)::after {
+      content: "·";
+      margin-left: 1.5rem;
+      opacity: 0.45;
+    }
+    .util__right { color: var(--cs-orange); }
+
+    /* Header */
+    .nav {
+      border-bottom: 1px solid var(--cs-rule);
+      background: var(--cs-paper);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: saturate(140%) blur(6px);
+    }
+    .nav__inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px var(--pad);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+      color: var(--cs-dark);
+      text-decoration: none;
+    }
+    .brand__mark {
+      width: 22px;
+      height: 22px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .brand__mark::before,
+    .brand__mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+    .brand__mark::before {
+      border: 1.5px solid var(--cs-dark);
+    }
+    .brand__mark::after {
+      background: var(--cs-orange);
+      transform: translate(5px, 5px);
+      width: 22px;
+      height: 22px;
+      mix-blend-mode: multiply;
+    }
+    .brand__text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+      gap: 2px;
+    }
+    .brand__text small {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+      font-weight: 500;
+    }
+    .nav__menu {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav__menu a {
+      font-size: 14px;
+      color: var(--cs-text);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    .nav__menu a::before {
+      content: attr(data-num);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--cs-mid);
+      margin-right: 6px;
+    }
+    .nav__menu a:hover { color: var(--cs-orange2); }
+
+    .nav__cta {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 9px 14px;
+      background: var(--cs-text);
+      color: var(--cs-paper);
+      text-decoration: none;
+      border: 1px solid var(--cs-text);
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav__cta:hover { background: var(--cs-orange); color: var(--cs-text); border-color: var(--cs-orange); }
+
+    @media (max-width: 760px) {
+      .nav__menu { display: none; }
+    }
+
+    /* =========================================================================
+       HERO
+       ========================================================================= */
+    .hero {
+      position: relative;
+      padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(3rem, 7vw, 5.5rem);
+      border-bottom: 1px solid var(--cs-rule);
+      overflow: hidden;
+    }
+
+    /* Cuadrícula sutil de papel técnico */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(28,43,48,0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(28,43,48,0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at 70% 50%, black 30%, transparent 80%);
+    }
+
+    .hero__inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 4rem);
+      align-items: stretch;
+    }
+
+    .hero__col-l { display: flex; flex-direction: column; }
+
+    .hero__eyebrow {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: clamp(1.25rem, 3vw, 2rem);
+    }
+    .hero__eyebrow-bar {
+      width: 36px;
+      height: 2px;
+      background: var(--cs-orange);
+    }
+
+    .hero__title {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: clamp(2.5rem, 5.4vw, 4.25rem);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      color: var(--cs-dark);
+      margin: 0 0 clamp(1.5rem, 3vw, 2rem);
+      text-wrap: balance;
+    }
+    .hero__title em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cs-orange2);
+    }
+
+    .hero__lead {
+      font-size: clamp(1rem, 1.55vw, 1.18rem);
+      line-height: 1.55;
+      color: var(--cs-text-2);
+      max-width: 38rem;
+      margin: 0 0 2rem;
+      text-wrap: pretty;
+    }
+
+    .hero__ctas {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: clamp(2rem, 4vw, 2.75rem);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 14.5px;
+      text-decoration: none;
+      padding: 13px 22px;
+      border: 1px solid var(--cs-text);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn--primary {
+      background: var(--cs-text);
+      color: var(--cs-paper);
+    }
+    .btn--primary:hover { background: var(--cs-orange); border-color: var(--cs-orange); color: var(--cs-text); }
+    .btn--ghost {
+      background: transparent;
+      color: var(--cs-text);
+    }
+    .btn--ghost:hover { background: var(--cs-text); color: var(--cs-paper); }
+
+    .btn__arrow {
+      font-family: var(--mono);
+      font-size: 13px;
+      transition: transform 0.2s;
+    }
+    .btn:hover .btn__arrow { transform: translateX(3px); }
+
+    /* Hero stats / coordenadas */
+    .hero__meta {
+      margin-top: auto;
+      padding-top: clamp(1.5rem, 3vw, 2rem);
+      border-top: 1px solid var(--cs-rule);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .hero__meta-item dt {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+      margin-bottom: 6px;
+    }
+    .hero__meta-item dd {
+      margin: 0;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--cs-dark);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 920px) {
+      .hero__inner { grid-template-columns: 1fr; }
+      .hero__col-r { order: 2; }
+      .hero__meta { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* =========================================================================
+       SCHEMATIC (Hero right side)
+       Ingeniería: tres bloques (DISEÑO / SISTEMA / FABRICACIÓN) conectados.
+       SISTEMA es la capa que Crafting Systems construye (acento naranja).
+       Mostramos dos rutas: la "MANUAL" tachada y la "SISTEMA" continua.
+       ========================================================================= */
+    .schematic {
+      position: relative;
+      background: var(--cs-white);
+      border: 1px solid var(--cs-rule-strong);
+      padding: clamp(1.25rem, 2.5vw, 1.75rem);
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .schematic__head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+      padding-bottom: 12px;
+      margin-bottom: clamp(1rem, 2vw, 1.5rem);
+      border-bottom: 1px dashed var(--cs-rule);
+    }
+    .schematic__head strong {
+      color: var(--cs-dark);
+      font-weight: 500;
+    }
+
+    .schematic__body {
+      flex: 1;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto 1fr auto 1fr;
+      gap: 0;
+      align-content: stretch;
+    }
+
+    /* Nodos */
+    .node {
+      position: relative;
+      padding: 14px 16px;
+      border: 1px solid var(--cs-rule-strong);
+      background: var(--cs-paper);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px 14px;
+      align-items: center;
+    }
+
+    .node__num {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      color: var(--cs-mid);
+      align-self: start;
+      padding-top: 2px;
+    }
+
+    .node__main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .node__title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--cs-dark);
+    }
+    .node__sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--cs-text-2);
+      letter-spacing: 0.02em;
+    }
+
+    .node__viz {
+      width: 64px;
+      height: 44px;
+      flex-shrink: 0;
+    }
+
+    .node--system {
+      border-color: var(--cs-orange);
+      background: #FFF7E6;
+      box-shadow: inset 3px 0 0 var(--cs-orange);
+    }
+    .node--system .node__num { color: var(--cs-orange2); }
+    .node--system .node__title { color: var(--cs-text); }
+    .node--system::before {
+      content: "CRAFTING SYSTEMS";
+      position: absolute;
+      top: -10px;
+      right: 14px;
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.14em;
+      background: var(--cs-orange);
+      color: var(--cs-text);
+      padding: 3px 7px;
+      font-weight: 600;
+    }
+
+    /* Conector entre nodos */
+    .connector {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 18px;
+      padding: 12px 0;
+      align-items: center;
+    }
+    .connector__label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cs-text-2);
+      text-align: right;
+    }
+    .connector__label .strike {
+      text-decoration: line-through;
+      color: var(--cs-mid);
+      opacity: 0.7;
+    }
+    .connector__line {
+      position: relative;
+      height: 28px;
+    }
+    .connector__line svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    /* Annotation strip on the right side */
+    .schematic__annot {
+      position: absolute;
+      right: -14px;
+      top: 0;
+      bottom: 0;
+      width: 14px;
+      pointer-events: none;
+    }
+    .schematic__annot::before {
+      content: "DIM. 1:1";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(90deg);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: var(--cs-mid);
+      white-space: nowrap;
+    }
+
+    .schematic__foot {
+      margin-top: clamp(1rem, 2vw, 1.25rem);
+      padding-top: 12px;
+      border-top: 1px dashed var(--cs-rule);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.06em;
+      color: var(--cs-text-2);
+    }
+    .schematic__foot strong { color: var(--cs-dark); font-weight: 500; }
+
+    /* =========================================================================
+       MANIFESTO BANNER (entre hero y problema)
+       ========================================================================= */
+    .manifesto {
+      background: var(--cs-dark);
+      color: var(--cs-light);
+      padding: clamp(3rem, 6vw, 4.5rem) 0;
+      position: relative;
+    }
+    .manifesto::before {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 2px;
+      background: var(--cs-orange);
+    }
+    .manifesto__inner {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: clamp(1rem, 3vw, 2.5rem);
+      align-items: start;
+    }
+    .manifesto__num {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--cs-orange);
+      padding-top: 12px;
+      border-top: 1px solid var(--cs-orange);
+    }
+    .manifesto__quote {
+      font-family: var(--sans);
+      font-size: clamp(1.5rem, 3vw, 2.15rem);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--cs-white);
+      margin: 0;
+      font-weight: 400;
+      max-width: 56rem;
+      text-wrap: pretty;
+    }
+    .manifesto__quote em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cs-orange);
+    }
+    .manifesto__attr {
+      margin-top: 1.5rem;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+    }
+
+    @media (max-width: 640px) {
+      .manifesto__inner { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================================================
+       PROBLEMA — lista técnica numerada
+       ========================================================================= */
+    .section {
+      padding: clamp(4rem, 8vw, 6.5rem) 0;
+    }
+
+    .section__head {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: clamp(1rem, 3vw, 2.5rem);
+      margin-bottom: clamp(2.5rem, 5vw, 4rem);
+      align-items: start;
+    }
+    .section__num {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--cs-orange2);
+      padding-top: 12px;
+      border-top: 1px solid var(--cs-orange);
+    }
+    .section__head-text { max-width: 50rem; }
+    .section__kicker {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+      margin-bottom: 14px;
+    }
+    .section__title {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: clamp(1.75rem, 3.6vw, 2.65rem);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--cs-dark);
+      margin: 0;
+      text-wrap: balance;
+    }
+    .section__title em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cs-orange2);
+    }
+
+    .problemas {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0;
+    }
+    .problemas__rail { /* deja espacio alineado con head */ }
+    .problemas__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--cs-rule);
+    }
+
+    .problema {
+      display: grid;
+      grid-template-columns: 70px minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: clamp(1rem, 3vw, 2.5rem);
+      padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+      border-bottom: 1px solid var(--cs-rule);
+      align-items: start;
+      position: relative;
+    }
+    .problema:hover { background: rgba(220, 232, 236, 0.25); }
+    .problema:hover .problema__num { color: var(--cs-orange2); }
+
+    .problema__num {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      color: var(--cs-mid);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .problema__head h3 {
+      font-family: var(--sans);
+      font-size: clamp(1.15rem, 1.8vw, 1.3rem);
+      font-weight: 600;
+      color: var(--cs-dark);
+      letter-spacing: -0.005em;
+      margin: 0 0 8px;
+      line-height: 1.25;
+    }
+    .problema__head p {
+      margin: 0;
+      color: var(--cs-text-2);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .problema__example {
+      padding: 14px 16px;
+      background: var(--cs-white);
+      border-left: 2px solid var(--cs-orange);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--cs-text);
+      letter-spacing: 0.005em;
+    }
+    .problema__example-label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--cs-orange2);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .problema__example .arrow {
+      color: var(--cs-mid);
+      margin: 0 6px;
+    }
+
+    @media (max-width: 880px) {
+      .section__head,
+      .problemas { grid-template-columns: 1fr; }
+      .problemas__rail { display: none; }
+      .problema {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    /* =========================================================================
+       PROCESO — 6 fases en grilla 3×2
+       ========================================================================= */
+    .section--proceso { background: var(--cs-paper); }
+
+    .proceso {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0;
+    }
+    .proceso__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--cs-rule-strong);
+      border-left: 1px solid var(--cs-rule-strong);
+      background: var(--cs-paper);
+    }
+    .fase {
+      padding: clamp(1.5rem, 2.5vw, 2rem);
+      border-right: 1px solid var(--cs-rule-strong);
+      border-bottom: 1px solid var(--cs-rule-strong);
+      background: var(--cs-white);
+      position: relative;
+      transition: background 0.2s;
+    }
+    .fase:hover { background: var(--cs-paper); }
+    .fase:hover .fase__num { color: var(--cs-orange2); }
+
+    .fase__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding-bottom: 12px;
+      margin-bottom: 1rem;
+      border-bottom: 1px dashed var(--cs-rule);
+    }
+    .fase__num {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--cs-mid);
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .fase__dur {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.06em;
+      color: var(--cs-mid);
+      text-transform: uppercase;
+    }
+    .fase__title {
+      font-family: var(--sans);
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      color: var(--cs-dark);
+      margin: 0 0 8px;
+      line-height: 1.2;
+    }
+    .fase__desc {
+      margin: 0 0 1rem;
+      font-size: 14px;
+      color: var(--cs-text-2);
+      line-height: 1.5;
+    }
+    .fase__hitos {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 1.7;
+      color: var(--cs-text);
+    }
+    .fase__hitos li {
+      padding-left: 16px;
+      position: relative;
+    }
+    .fase__hitos li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--cs-orange);
+      font-weight: 600;
+    }
+
+    @media (max-width: 980px) {
+      .proceso__list { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .proceso { grid-template-columns: 1fr; }
+      .proceso__list { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================================================
+       MERCADOS — 4 segmentos
+       ========================================================================= */
+    .mercados {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0;
+    }
+    .mercados__rail { display: block; }
+    .mercados__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--cs-rule-strong);
+      border-left: 1px solid var(--cs-rule-strong);
+    }
+    .mercado {
+      padding: clamp(1.75rem, 3vw, 2.25rem);
+      border-right: 1px solid var(--cs-rule-strong);
+      border-bottom: 1px solid var(--cs-rule-strong);
+      background: var(--cs-white);
+      position: relative;
+      transition: background 0.2s;
+    }
+    .mercado:hover { background: var(--cs-paper); }
+
+    .mercado__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--cs-rule);
+    }
+    .mercado__id {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--cs-orange2);
+      font-weight: 600;
+    }
+    .mercado__state {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      color: var(--cs-mid);
+      text-transform: uppercase;
+    }
+    .mercado h3 {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: clamp(1.25rem, 2vw, 1.5rem);
+      letter-spacing: -0.01em;
+      color: var(--cs-dark);
+      margin: 0 0 10px;
+      line-height: 1.2;
+    }
+    .mercado__desc {
+      color: var(--cs-text-2);
+      font-size: 15px;
+      margin: 0 0 1.25rem;
+      line-height: 1.55;
+    }
+    .mercado__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mercado__tags li {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cs-text-2);
+      padding: 4px 9px;
+      border: 1px solid var(--cs-rule-strong);
+      background: var(--cs-paper);
+    }
+
+    @media (max-width: 760px) {
+      .mercados { grid-template-columns: 1fr; }
+      .mercados__grid { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================================================
+       CONTACTO — bloque oscuro de cierre
+       ========================================================================= */
+    .section--contact {
+      background: var(--cs-dark);
+      color: var(--cs-light);
+      padding: clamp(4rem, 7vw, 6rem) 0 clamp(3rem, 5vw, 4rem);
+      position: relative;
+      overflow: hidden;
+    }
+    .section--contact::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at 30% 40%, black 30%, transparent 80%);
+    }
+    .contacto__wrap {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
+      align-items: start;
+    }
+
+    .contacto__head {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: clamp(1rem, 3vw, 2.5rem);
+      align-items: start;
+      margin-bottom: clamp(1.5rem, 3vw, 2rem);
+    }
+    .contacto__num {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--cs-orange);
+      padding-top: 12px;
+      border-top: 1px solid var(--cs-orange);
+    }
+    .contacto__kicker {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+      margin: 0 0 14px;
+    }
+    .contacto__title {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      color: var(--cs-white);
+      margin: 0 0 2rem;
+      max-width: 30rem;
+      text-wrap: balance;
+    }
+    .contacto__title em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cs-orange);
+    }
+
+    .contacto__email {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 14px;
+      font-family: var(--mono);
+      font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+      letter-spacing: 0.01em;
+      color: var(--cs-orange);
+      text-decoration: none;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--cs-orange);
+      transition: color 0.2s, border-color 0.2s, padding 0.2s;
+    }
+    .contacto__email:hover {
+      color: var(--cs-white);
+      border-color: var(--cs-white);
+      padding-left: 6px;
+    }
+    .contacto__email .arrow {
+      font-family: var(--mono);
+    }
+
+    .contacto__meta {
+      margin-top: clamp(2rem, 4vw, 3rem);
+      padding-top: clamp(1.5rem, 3vw, 2rem);
+      border-top: 1px solid rgba(220, 232, 236, 0.18);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem 2.5rem;
+      max-width: 36rem;
+    }
+    .contacto__meta dt {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+      margin-bottom: 6px;
+    }
+    .contacto__meta dd {
+      margin: 0;
+      color: var(--cs-light);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .contacto__aside {
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(220, 232, 236, 0.14);
+      padding: clamp(1.5rem, 3vw, 2rem);
+    }
+    .contacto__aside-head {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cs-orange);
+      margin: 0 0 1.5rem;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed rgba(220, 232, 236, 0.2);
+    }
+    .contacto__steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .contacto__steps li {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .contacto__steps .step__num {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--cs-orange);
+      padding-top: 4px;
+    }
+    .contacto__steps strong {
+      display: block;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 14.5px;
+      color: var(--cs-white);
+      margin-bottom: 4px;
+      letter-spacing: -0.005em;
+    }
+    .contacto__steps p {
+      margin: 0;
+      font-size: 13.5px;
+      color: var(--cs-light);
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 880px) {
+      .contacto__wrap { grid-template-columns: 1fr; }
+      .contacto__head { grid-template-columns: 1fr; }
+      .contacto__meta { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--cs-dark);
+      color: var(--cs-mid);
+      border-top: 1px solid rgba(220, 232, 236, 0.12);
+      padding: 1.5rem 0 2rem;
+    }
+    .footer__inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .footer__inner a { color: var(--cs-mid); text-decoration: none; }
+    .footer__inner a:hover { color: var(--cs-orange); }
+
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================================
+       UTILITY BAR
+       ========================================================================= -->
+  <div class="util">
+    <div class="util__inner">
+      <div class="util__left">
+        <span>Crafting Systems</span>
+        <span>Ingeniería de software · AEC + Fabricación digital</span>
+        <span>Santiago, CL</span>
+      </div>
+      <div class="util__right">Aceptando proyectos</div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       HEADER / NAV
+       ========================================================================= -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="#">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__text">
+          Crafting Systems
+          <small>Workflow engineering</small>
+        </span>
+      </a>
+      <nav class="nav__menu" aria-label="Principal">
+        <a href="#problema" data-num="01">Problema</a>
+        <a href="#proceso" data-num="02">Proceso</a>
+        <a href="#mercados" data-num="03">Mercados</a>
+        <a href="#contacto" data-num="04">Contacto</a>
+      </nav>
+      <a class="nav__cta" href="#contacto">Conversemos →</a>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       HERO
+       ========================================================================= -->
+  <section class="hero">
+    <div class="wrap hero__inner">
+      <div class="hero__col-l reveal">
+        <div class="hero__eyebrow">
+          <span class="hero__eyebrow-bar" aria-hidden="true"></span>
+          <span class="mono mono--orange">[01] · Posicionamiento</span>
+        </div>
+
+        <h1 class="hero__title">
+          Construimos los sistemas que <em>automatizan</em> e <em>integran</em> tu operación técnica.
+        </h1>
+
+        <p class="hero__lead">
+          Entramos a empresas con procesos técnicos manuales, repetitivos o fragmentados — entendemos cómo trabajan desde adentro y construimos los sistemas que hacen que su operación deje de depender de trabajo manual y de personas específicas. Implementamos las herramientas que el proceso necesita, exista software especializado o no.
+        </p>
+
+        <div class="hero__ctas">
+          <a class="btn btn--primary" href="#contacto">
+            Levantemos tu workflow <span class="btn__arrow">→</span>
+          </a>
+          <a class="btn btn--ghost" href="#problema">
+            Cómo lo abordamos <span class="btn__arrow">↓</span>
+          </a>
+        </div>
+
+        <dl class="hero__meta">
+          <div class="hero__meta-item">
+            <dt>Sectores</dt>
+            <dd>AEC · técnico · industrial</dd>
+          </div>
+          <div class="hero__meta-item">
+            <dt>Alcance</dt>
+            <dd>Workflows · información · documentación</dd>
+          </div>
+          <div class="hero__meta-item">
+            <dt>Entrega</dt>
+            <dd>Plugins · APIs · integraciones · sistemas a medida</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- ============== SCHEMATIC ============== -->
+      <div class="hero__col-r reveal">
+        <figure class="schematic" aria-label="Topología del sistema diseño–fabricación">
+          <figcaption class="schematic__head">
+            <span><strong>FIG.01</strong> · Topología de integración</span>
+            <span>CS-26-001</span>
+          </figcaption>
+
+          <div class="schematic__body">
+            <!-- Nodo 1: Diseño -->
+            <article class="node node--design">
+              <span class="node__num">01</span>
+              <div class="node__main">
+                <span class="node__title">Inputs del proceso</span>
+                <span class="node__sub">modelos · datos · documentos</span>
+              </div>
+              <svg class="node__viz" viewBox="0 0 64 44" fill="none" stroke="#3D5059" stroke-width="1" aria-hidden="true">
+                <rect x="8" y="6" width="48" height="32"/>
+                <path d="M8 6 L32 18 L56 6 M32 18 L32 38" stroke-dasharray="2 2"/>
+                <circle cx="8" cy="6" r="1.5" fill="#3D5059"/>
+                <circle cx="56" cy="6" r="1.5" fill="#3D5059"/>
+                <circle cx="8" cy="38" r="1.5" fill="#3D5059"/>
+                <circle cx="56" cy="38" r="1.5" fill="#3D5059"/>
+                <circle cx="32" cy="18" r="1.5" fill="#F5A800"/>
+              </svg>
+            </article>
+
+            <!-- Conector 1→2 -->
+            <div class="connector">
+              <span class="connector__label">
+                <span class="strike">transferencia manual</span><br/>
+                <span style="color: var(--cs-orange2);">integración automatizada</span>
+              </span>
+              <div class="connector__line">
+                <svg viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true">
+                  <!-- línea manual tachada -->
+                  <path d="M5 8 Q 100 8 195 8" stroke="#7B9AA8" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
+                  <line x1="40" y1="2" x2="60" y2="14" stroke="#7B9AA8" stroke-width="1" opacity="0.5"/>
+                  <!-- línea sistema -->
+                  <path d="M5 22 Q 100 22 188 22" stroke="#F5A800" stroke-width="1.5" fill="none"/>
+                  <path d="M183 18 L191 22 L183 26" stroke="#F5A800" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Nodo 2: Sistema (Crafting Systems) -->
+            <article class="node node--system">
+              <span class="node__num">02</span>
+              <div class="node__main">
+                <span class="node__title">Sistema robusto</span>
+                <span class="node__sub">plugins · APIs · QA · deployment</span>
+              </div>
+              <svg class="node__viz" viewBox="0 0 64 44" fill="none" stroke="#E07800" stroke-width="1.2" aria-hidden="true">
+                <rect x="6" y="10" width="20" height="24"/>
+                <rect x="38" y="10" width="20" height="24"/>
+                <line x1="26" y1="22" x2="38" y2="22"/>
+                <path d="M34 18 L40 22 L34 26" fill="none"/>
+                <line x1="11" y1="16" x2="21" y2="16" stroke-width="0.8"/>
+                <line x1="11" y1="20" x2="18" y2="20" stroke-width="0.8"/>
+                <line x1="11" y1="24" x2="21" y2="24" stroke-width="0.8"/>
+                <line x1="11" y1="28" x2="16" y2="28" stroke-width="0.8"/>
+                <circle cx="48" cy="22" r="4" fill="#F5A800" stroke="none"/>
+              </svg>
+            </article>
+
+            <!-- Conector 2→3 -->
+            <div class="connector">
+              <span class="connector__label" style="color: var(--cs-orange2);">
+                outputs estructurados<br/>listos para ejecución
+              </span>
+              <div class="connector__line">
+                <svg viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M5 14 Q 100 14 188 14" stroke="#F5A800" stroke-width="1.5" fill="none"/>
+                  <path d="M183 10 L191 14 L183 18" stroke="#F5A800" stroke-width="1.5" fill="none"/>
+                  <line x1="40" y1="8" x2="40" y2="20" stroke="#F5A800" stroke-width="0.8" opacity="0.5"/>
+                  <line x1="80" y1="8" x2="80" y2="20" stroke="#F5A800" stroke-width="0.8" opacity="0.5"/>
+                  <line x1="120" y1="8" x2="120" y2="20" stroke="#F5A800" stroke-width="0.8" opacity="0.5"/>
+                  <line x1="160" y1="8" x2="160" y2="20" stroke="#F5A800" stroke-width="0.8" opacity="0.5"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Nodo 3: Fabricación -->
+            <article class="node node--fab">
+              <span class="node__num">03</span>
+              <div class="node__main">
+                <span class="node__title">Outputs del proceso</span>
+                <span class="node__sub">producción · entregables · reportes</span>
+              </div>
+              <svg class="node__viz" viewBox="0 0 64 44" fill="none" stroke="#3D5059" stroke-width="1" aria-hidden="true">
+                <rect x="6" y="14" width="52" height="22"/>
+                <rect x="20" y="6" width="24" height="8"/>
+                <line x1="26" y1="10" x2="38" y2="10" stroke-width="1.4"/>
+                <line x1="32" y1="14" x2="32" y2="22" stroke="#F5A800" stroke-width="1.4"/>
+                <circle cx="32" cy="22" r="2" fill="#F5A800" stroke="none"/>
+                <line x1="10" y1="32" x2="54" y2="32" stroke-dasharray="2 2"/>
+              </svg>
+            </article>
+          </div>
+
+          <div class="schematic__annot" aria-hidden="true"></div>
+
+          <div class="schematic__foot">
+            <span><strong>ANTES</strong> · traspaso manual frágil</span>
+            <span style="color: var(--cs-orange2);"><strong>DESPUÉS</strong> · sistema sin dependencias →</span>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       MANIFESTO
+       ========================================================================= -->
+  <section class="manifesto">
+    <div class="wrap manifesto__inner reveal">
+      <span class="manifesto__num">— TESIS</span>
+      <div>
+        <p class="manifesto__quote">
+          No adaptamos nuestro proceso a las herramientas disponibles.<br/>
+          <em>Desarrollamos las herramientas que el proceso necesita.</em>
+        </p>
+        <span class="manifesto__attr">— Crafting Systems</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       PROBLEMA QUE RESOLVEMOS
+       ========================================================================= -->
+  <section class="section" id="problema">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <span class="section__num">— 02</span>
+        <div class="section__head-text">
+          <p class="section__kicker">El problema que resolvemos</p>
+          <h2 class="section__title">
+            Fricciones estructurales que se repiten en la mayoría de las empresas AEC, <em>independiente de su tamaño o sofisticación.</em>
+          </h2>
+        </div>
+      </div>
+
+      <div class="problemas reveal">
+        <div class="problemas__rail" aria-hidden="true"></div>
+        <ol class="problemas__list">
+
+          <li class="problema">
+            <span class="problema__num">01 / 05</span>
+            <div class="problema__head">
+              <h3>Workflows manuales y frágiles</h3>
+              <p>Procesos que dependen de usuarios específicos. Si esa persona no está, el proceso se detiene.</p>
+            </div>
+            <div class="problema__example">
+              <span class="problema__example-label">Caso real</span>
+              "El único que sabe correr el script de nesting está con licencia <span class="arrow">→</span> la producción espera 3 días."
+            </div>
+          </li>
+
+          <li class="problema">
+            <span class="problema__num">02 / 05</span>
+            <div class="problema__head">
+              <h3>Desconexión diseño ↔ fabricación</h3>
+              <p>El modelo digital no llega directamente a la máquina. Existen múltiples pasos de traducción manual con alto riesgo de error.</p>
+            </div>
+            <div class="problema__example">
+              <span class="problema__example-label">Flujo típico</span>
+              Rhino <span class="arrow">→</span> exportar DXF <span class="arrow">→</span> ajustar manualmente <span class="arrow">→</span> traducir a G-code <span class="arrow">→</span> rezar
+            </div>
+          </li>
+
+          <li class="problema">
+            <span class="problema__num">03 / 05</span>
+            <div class="problema__head">
+              <h3>Automatizaciones de baja madurez</h3>
+              <p>Scripts Dynamo o Grasshopper que funcionan en el computador de quien los hizo, pero no son robustos, mantenibles ni transferibles.</p>
+            </div>
+            <div class="problema__example">
+              <span class="problema__example-label">Síntoma</span>
+              <code>script_v17_FINAL_funciona_OK.gh</code> <span class="arrow">→</span> falla en otra máquina, sin documentación, sin tests.
+            </div>
+          </li>
+
+          <li class="problema">
+            <span class="problema__num">04 / 05</span>
+            <div class="problema__head">
+              <h3>Baja integración entre sistemas</h3>
+              <p>Cada software opera en su silo. La información se traspasa manualmente entre plataformas, duplicando trabajo y generando errores de versión.</p>
+            </div>
+            <div class="problema__example">
+              <span class="problema__example-label">Resultado</span>
+              Un cambio en BIM <span class="arrow">→</span> actualizar a mano en CAM <span class="arrow">→</span> actualizar planilla de corte <span class="arrow">→</span> error si falta uno.
+            </div>
+          </li>
+
+          <li class="problema">
+            <span class="problema__num">05 / 05</span>
+            <div class="problema__head">
+              <h3>Brecha entre dominio AEC y software engineering</h3>
+              <p>Hay usuarios avanzados de BIM/CAD y hay developers de software, pero casi nadie combina ambas capacidades con la profundidad necesaria para construir sistemas de producción.</p>
+            </div>
+            <div class="problema__example">
+              <span class="problema__example-label">Brecha</span>
+              Modelar bien ≠ programar bien. <span class="arrow">→</span> Los proyectos quedan a medio camino, sin QA ni deployment.
+            </div>
+          </li>
+
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CÓMO TRABAJAMOS — 6 fases
+       ========================================================================= -->
+  <section class="section section--proceso" id="proceso">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <span class="section__num">— 03</span>
+        <div class="section__head-text">
+          <p class="section__kicker">Cómo trabajamos</p>
+          <h2 class="section__title">
+            Una secuencia operacional <em>documentada y repetible</em> en cada proyecto.
+          </h2>
+        </div>
+      </div>
+
+      <div class="proceso reveal">
+        <div class="proceso__rail" aria-hidden="true"></div>
+        <ol class="proceso__list">
+
+          <li class="fase">
+            <header class="fase__head">
+              <span class="fase__num">FASE 00</span>
+              <span class="fase__dur">1–2 sem.</span>
+            </header>
+            <h3 class="fase__title">Diagnóstico</h3>
+            <p class="fase__desc">Entender el proceso real del cliente, no el ideal.</p>
+            <ul class="fase__hitos">
+              <li>Entrevistas con usuarios operacionales</li>
+              <li>Observación directa del workflow</li>
+              <li>Mapeo de inputs, outputs y puntos de fallo</li>
+              <li>Estimación del impacto del dolor</li>
+            </ul>
+          </li>
+
+          <li class="fase">
+            <header class="fase__head">
+              <span class="fase__num">FASE 01</span>
+              <span class="fase__dur">1 sem.</span>
+            </header>
+            <h3 class="fase__title">Especificación</h3>
+            <p class="fase__desc">Definir exactamente qué se construye y cómo se valida.</p>
+            <ul class="fase__hitos">
+              <li>Documento de especificación técnica</li>
+              <li>Criterios de aceptación operacional</li>
+              <li>Identificación de riesgos técnicos</li>
+              <li>Acuerdo formal de alcance</li>
+            </ul>
+          </li>
+
+          <li class="fase">
+            <header class="fase__head">
+              <span class="fase__num">FASE 02</span>
+              <span class="fase__dur">1–2 sem.</span>
+            </header>
+            <h3 class="fase__title">Prototipo</h3>
+            <p class="fase__desc">Validar la dirección con el menor código posible.</p>
+            <ul class="fase__hitos">
+              <li>Implementación mínima funcional</li>
+              <li>Validación con usuario real</li>
+              <li>Identificación de casos borde</li>
+              <li>Decisión de escalar o ajustar</li>
+            </ul>
+          </li>
+
+          <li class="fase">
+            <header class="fase__head">
+              <span class="fase__num">FASE 03</span>
+              <span class="fase__dur">variable</span>
+            </header>
+            <h3 class="fase__title">Desarrollo robusto</h3>
+            <p class="fase__desc">Construir el sistema definitivo, no un prototipo extendido.</p>
+            <ul class="fase__hitos">
+              <li>Implementación en stack definitivo</li>
+              <li>QA / QC del código</li>
+              <li>Documentación técnica y operacional</li>
+              <li>Testing en entorno real del cliente</li>
+            </ul>
+          </li>
+
+          <li class="fase">
+            <header class="fase__head">
+              <span class="fase__num">FASE 04</span>
+              <span class="fase__dur">1–2 sem.</span>
+            </header>
+            <h3 class="fase__title">Deployment</h3>
+            <p class="fase__desc">Entregar el sistema en producción con criterios formales.</p>
+            <ul class="fase__hitos">
+              <li>Instalación en entorno del cliente</li>
+              <li>Sesión de entrenamiento</li>
+              <li>Período de acompañamiento</li>
+              <li>Aceptación formal</li>
+            </ul>
+          </li>
+
+          <li class="fase">
+            <header class="fase__head">
+              <span class="fase__num">FASE 05</span>
+              <span class="fase__dur">recurrente</span>
+            </header>
+            <h3 class="fase__title">Soporte y evolución</h3>
+            <p class="fase__desc">Mantener el sistema vivo y mejorarlo en el tiempo.</p>
+            <ul class="fase__hitos">
+              <li>Canal de soporte definido</li>
+              <li>Registro de issues y mejoras</li>
+              <li>Revisiones periódicas</li>
+              <li>Propuestas de evolución</li>
+            </ul>
+          </li>
+
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       MERCADOS — 4 segmentos
+       ========================================================================= -->
+  <section class="section" id="mercados">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <span class="section__num">— 04</span>
+        <div class="section__head-text">
+          <p class="section__kicker">Dónde trabajamos</p>
+          <h2 class="section__title">
+            Empresas técnicas que sienten que sus procesos digitales <em>no rinden lo que deberían.</em>
+          </h2>
+        </div>
+      </div>
+
+      <div class="mercados reveal">
+        <div class="mercados__rail" aria-hidden="true"></div>
+        <div class="mercados__grid">
+
+          <article class="mercado">
+            <header class="mercado__head">
+              <span class="mercado__id">M—01</span>
+              <span class="mercado__state">Foco actual</span>
+            </header>
+            <h3>Fabricación digital</h3>
+            <p class="mercado__desc">Talleres con producción a medida y geometría variable. La preparación de archivos y la transferencia hacia máquina se rehace en cada pieza.</p>
+            <ul class="mercado__tags">
+              <li>Mobiliario</li>
+              <li>Mecanizado</li>
+              <li>Producción a medida</li>
+            </ul>
+          </article>
+
+          <article class="mercado">
+            <header class="mercado__head">
+              <span class="mercado__id">M—02</span>
+              <span class="mercado__state">Foco actual</span>
+            </header>
+            <h3>Industrialización y prefabricación</h3>
+            <p class="mercado__desc">Empresas con producción seriada que dependen de coordinación entre diseño, ingeniería y planta. La información se traspasa entre sistemas a mano.</p>
+            <ul class="mercado__tags">
+              <li>Prefabricación</li>
+              <li>Estructuras</li>
+              <li>SIP / paneles</li>
+            </ul>
+          </article>
+
+          <article class="mercado">
+            <header class="mercado__head">
+              <span class="mercado__id">M—03</span>
+              <span class="mercado__state">Expansión</span>
+            </header>
+            <h3>Constructoras y oficinas técnicas</h3>
+            <p class="mercado__desc">Equipos que gestionan modelos, coordinación y documentación técnica. La calidad del entregable depende de procesos manuales propensos a error.</p>
+            <ul class="mercado__tags">
+              <li>Coordinación BIM</li>
+              <li>QA / QC</li>
+              <li>Documentación</li>
+            </ul>
+          </article>
+
+          <article class="mercado">
+            <header class="mercado__head">
+              <span class="mercado__id">M—04</span>
+              <span class="mercado__state">Expansión</span>
+            </header>
+            <h3>Procesos técnicos avanzados</h3>
+            <p class="mercado__desc">Empresas con flujos altamente integrados o automatización productiva, donde el cuello de botella ya no es la máquina sino la información que la alimenta.</p>
+            <ul class="mercado__tags">
+              <li>Integración con ERP</li>
+              <li>Automatización industrial</li>
+              <li>Datos de producción</li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CONTACTO
+       ========================================================================= -->
+  <section class="section--contact" id="contacto">
+    <div class="wrap contacto__wrap reveal">
+
+      <div class="contacto__main">
+        <header class="contacto__head">
+          <span class="contacto__num">— 05</span>
+          <div>
+            <p class="contacto__kicker">Conversemos</p>
+            <h2 class="contacto__title">
+              Si tu operación se cae cuando falta una persona, <em>escríbenos.</em>
+            </h2>
+          </div>
+        </header>
+
+        <a class="contacto__email" href="/cdn-cgi/l/email-protection#7553564445434e53564444454e53564c424e535644444d4e53564c424e53564444414e53564444414e53564444444e535643414e53564c4c4e53564444414e53564c424e53564445474e53564444434e53564445404e53564444454e53564445464e535641404e53564444404e53564447444e53564444404e53564444434e53564445444e535644454c4e53564444404e535641434e53564c4c4e53564444444e535644454c4e">
+          <span class="arrow">→</span> &#106;&#110;&#97;&#118;&#97;&#114;&#114;&#111;&#64;&#99;&#114;&#97;&#102;&#116;&#105;&#110;&#103;&#45;&#115;&#121;&#115;&#116;&#101;&#109;&#115;&#46;&#99;&#111;&#109;
+        </a>
+
+        <dl class="contacto__meta">
+          <div>
+            <dt>Para quién</dt>
+            <dd>Empresas con procesos técnicos manuales, repetitivos o fragmentados.</dd>
+          </div>
+          <div>
+            <dt>Qué entregamos</dt>
+            <dd>Plugins, APIs, integraciones y sistemas robustos a medida.</dd>
+          </div>
+          <div>
+            <dt>Modalidad</dt>
+            <dd>Pilotos acotados, desarrollos completos y soporte recurrente.</dd>
+          </div>
+          <div>
+            <dt>Ubicación</dt>
+            <dd>Santiago, Chile · trabajamos en remoto y en terreno.</dd>
+          </div>
+        </dl>
+      </div>
+
+      <aside class="contacto__aside">
+        <h4 class="contacto__aside-head">— Cómo abordamos la conversación</h4>
+        <ol class="contacto__steps">
+          <li>
+            <span class="step__num">01</span>
+            <div>
+              <strong>Conversación inicial</strong>
+              <p>Entender en qué consiste el proceso y dónde está el dolor real.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step__num">02</span>
+            <div>
+              <strong>Visita o levantamiento</strong>
+              <p>Ver el workflow desde adentro, sin filtros ni interpretaciones.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step__num">03</span>
+            <div>
+              <strong>Propuesta acotada</strong>
+              <p>Alcance, plazo y criterios de aceptación por escrito antes de empezar.</p>
+            </div>
+          </li>
+        </ol>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__inner">
+        <span>© 2026 Crafting Systems</span>
+        <span><a href="/cdn-cgi/l/email-protection#0620253736303d20253737363d20253f313d202537373e3d20253f313d20253737323d20253737323d20253737373d202530323d20253f3f3d20253737323d20253f313d20253736343d20253737303d20253736333d20253737363d20253736353d202532333d20253737333d20253734373d20253737333d20253737303d20253736373d202537363f3d20253737333d202532303d20253f3f3d20253737373d202537363f3d">&#106;&#110;&#97;&#118;&#97;&#114;&#114;&#111;&#64;&#99;&#114;&#97;&#102;&#116;&#105;&#110;&#103;&#45;&#115;&#121;&#115;&#116;&#101;&#109;&#115;&#46;&#99;&#111;&#109;</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Reveal on scroll
+    (function () {
+      var els = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window)) {
+        els.forEach(function (el) { el.classList.add("is-visible"); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+
+    // Smooth anchor
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var id = this.getAttribute("href");
+        if (!id || id === "#") return;
+        var t = document.querySelector(id);
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      });
+    });
+  </script>
+
+</body>
+</html>
