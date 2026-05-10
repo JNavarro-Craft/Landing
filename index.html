@@ -16,7 +16,7 @@
        Aesthetic direction (declared up-front):
        Documento de ingeniería. IBM Plex Sans + Plex Mono + Plex Serif (cursiva
        para énfasis manuscrito). Fondo papel-plano off-white. Reglas hairline,
-       códigos en mono (FIG.01 / 01-A), naranja usado solamente como acento
+       códigos en mono donde aplica, naranja usado solamente como acento
        del "sistema" / automatización. Sin gradientes, sin íconos genéricos,
        sin sombras dramáticas.
        ========================================================================= */
@@ -405,24 +405,6 @@
       flex-direction: column;
     }
 
-    .schematic__head {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      font-family: var(--mono);
-      font-size: 10.5px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--cs-mid);
-      padding-bottom: 12px;
-      margin-bottom: clamp(1rem, 2vw, 1.5rem);
-      border-bottom: 1px dashed var(--cs-rule);
-    }
-    .schematic__head strong {
-      color: var(--cs-dark);
-      font-weight: 500;
-    }
-
     .schematic__body {
       flex: 1;
       position: relative;
@@ -539,18 +521,6 @@
       bottom: 0;
       width: 14px;
       pointer-events: none;
-    }
-    .schematic__annot::before {
-      content: "DIM. 1:1";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(90deg);
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      color: var(--cs-mid);
-      white-space: nowrap;
     }
 
     .schematic__foot {
@@ -1142,35 +1112,66 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 0;
+      align-items: stretch;
       border-top: 1px solid var(--cs-rule-strong);
       border-left: 1px solid var(--cs-rule-strong);
     }
     .entregable {
+      position: relative;
+      z-index: 0;
       min-width: 0;
+      height: 100%;
       background: var(--cs-white);
       border-right: 1px solid var(--cs-rule-strong);
       border-bottom: 1px solid var(--cs-rule-strong);
       display: flex;
       flex-direction: column;
       gap: clamp(1.5rem, 2.5vw, 2.25rem);
-      transition: background 0.2s;
+      transition: background 0.2s, box-shadow 0.2s;
     }
-    .entregable:hover { background: var(--cs-paper); }
+    .entregable__lead {
+      flex: 0 0 auto;
+      padding: clamp(2.5rem, 4vw, 3.5rem);
+      padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1rem, 1.5vw, 1.35rem);
+    }
+    .entregable:hover {
+      background: var(--cs-paper);
+      z-index: 1;
+      box-shadow: 0 0 0 1px var(--cs-orange);
+    }
 
     .entregable__diag {
       position: relative;
+      flex: 1 1 auto;
+      min-height: 200px;
+      align-self: stretch;
       background: var(--cs-paper);
       border-bottom: 1px dashed var(--cs-rule);
-      aspect-ratio: 16 / 7;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      padding: clamp(2.5rem, 4vw, 3.5rem);
+      align-items: stretch;
+      justify-content: stretch;
+      overflow: visible;
+      padding: clamp(1.25rem, 3vw, 2rem);
+      box-sizing: border-box;
     }
-    .diag {
-      width: 88%;
-      height: 80%;
+    .entregable__diag svg.diag {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: block;
+      overflow: visible;
+    }
+    .entregable__diag .nesting-compare {
+      flex: 1 1 auto;
+      align-self: stretch;
+      width: 100%;
+      min-height: 0;
+      min-width: 0;
     }
     .diag__node {
       fill: var(--cs-white);
@@ -1202,10 +1203,10 @@
     .diag__s--accent { fill: var(--cs-orange2); opacity: 0.85; }
 
     .entregable__body {
-      padding: clamp(2.5rem, 4vw, 3.5rem);
+      flex: 0 0 auto;
+      padding: 0 clamp(2.5rem, 4vw, 3.5rem) clamp(2.5rem, 4vw, 3.5rem);
       display: flex;
       flex-direction: column;
-      flex: 1;
       gap: clamp(1rem, 1.5vw, 1.35rem);
     }
     .entregable__head {
@@ -1222,7 +1223,6 @@
       color: var(--cs-mid);
       font-weight: 600;
     }
-    .entregable__id--accent { color: var(--cs-orange2); }
     .entregable__head h3 {
       font-family: var(--sans);
       font-size: 1.1rem;
@@ -1233,15 +1233,6 @@
       line-height: 1.25;
       flex: 1;
       min-width: 200px;
-    }
-    .entregable__feature-tag {
-      font-family: var(--mono);
-      font-size: 9.5px;
-      letter-spacing: 0.14em;
-      color: var(--cs-text);
-      background: var(--cs-orange);
-      padding: 3px 7px;
-      font-weight: 700;
     }
     .entregable__desc {
       font-size: 14px;
@@ -1290,22 +1281,19 @@
       text-transform: uppercase;
     }
 
-    /* 04 — destacado (misma celda de grilla que el resto) */
-    .entregable--feature {
-      border: 1px solid var(--cs-orange);
-      box-shadow: 12px 12px 0 -1px var(--cs-orange);
-      position: relative;
-    }
     .nesting-compare {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      align-items: stretch;
       gap: clamp(1.25rem, 2vw, 1.75rem);
       width: 100%;
       height: 100%;
+      min-height: 0;
     }
     .nesting-compare__col {
       display: flex;
       flex-direction: column;
+      min-height: 0;
       padding: 24px;
       background: var(--cs-white);
       border: 1px solid var(--cs-rule);
@@ -1316,8 +1304,11 @@
     }
     .nesting-compare__col svg {
       width: 100%;
-      flex: 1;
-      min-height: 72px;
+      height: 100%;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: visible;
+      display: block;
     }
     .nesting-compare__label {
       display: block;
@@ -1337,7 +1328,6 @@
     @media (max-width: 640px) {
       .entregables { grid-template-columns: 1fr; }
       .nesting-compare { grid-template-columns: 1fr; }
-      .entregable--feature { box-shadow: 6px 6px 0 -1px var(--cs-orange); }
     }
 
     /* =========================================================================
@@ -1568,7 +1558,7 @@
       <nav class="nav__menu" aria-label="Principal">
         <a href="#pilares" data-num="01">Qué hacemos</a>
         <a href="#proceso" data-num="02">Proceso</a>
-        <a href="#construimos" data-num="03">Construimos</a>
+        <a href="#construimos" data-num="03">Lo que construimos</a>
         <a href="#contacto" data-num="04">Contacto</a>
       </nav>
       <a class="nav__cta" href="#contacto">Conversemos →</a>
@@ -1583,11 +1573,11 @@
       <div class="hero__col-l reveal">
         <div class="hero__eyebrow">
           <span class="hero__eyebrow-bar" aria-hidden="true"></span>
-          <span class="mono mono--orange">[01] · Posicionamiento</span>
+          <span class="mono mono--orange">Crafting Systems</span>
         </div>
 
         <h1 class="hero__title">
-          Construimos los sistemas que <em>automatizan</em> e <em>integran</em> el flujo diseño–fabricación en empresas AEC.
+          Construimos los sistemas que <em>automatizan</em> e <em>integran</em> diseño y fabricación en empresas AEC.
         </h1>
 
         <p class="hero__lead">
@@ -1627,11 +1617,6 @@
       <!-- ============== SCHEMATIC ============== -->
       <div class="hero__col-r reveal">
         <figure class="schematic" aria-label="Topología del sistema diseño–fabricación">
-          <figcaption class="schematic__head">
-            <span><strong>FIG.01</strong> · Topología de integración</span>
-            <span>CS-26-001</span>
-          </figcaption>
-
           <div class="schematic__body">
             <!-- Nodo 1: Diseño -->
             <article class="node node--design">
@@ -2126,6 +2111,13 @@
 
         <!-- 01 — Plugin Rhino / GH -->
         <article class="entregable">
+          <div class="entregable__lead">
+            <header class="entregable__head">
+              <span class="entregable__id">01</span>
+              <h3>Plugin Rhino / Grasshopper a medida</h3>
+            </header>
+            <p class="entregable__desc">Componentes y plugins específicos para tu workflow en Rhino o Grasshopper. No adaptas tu proceso al software — el software se adapta a tu proceso.</p>
+          </div>
           <div class="entregable__diag">
             <svg class="diag" viewBox="0 0 320 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <rect class="diag__node" x="8" y="36" width="72" height="48"/>
@@ -2142,11 +2134,6 @@
             </svg>
           </div>
           <div class="entregable__body">
-            <header class="entregable__head">
-              <span class="entregable__id">01</span>
-              <h3>Plugin Rhino / Grasshopper a medida</h3>
-            </header>
-            <p class="entregable__desc">Componentes y plugins específicos para tu workflow en Rhino o Grasshopper. No adaptas tu proceso al software — el software se adapta a tu proceso.</p>
             <div class="entregable__case">
               <span class="entregable__case-label">Caso típico</span>
               <p>Automatización de geometría variable, generación de documentación técnica y exportación parametrizada.</p>
@@ -2157,6 +2144,13 @@
 
         <!-- 02 — Exportador CNC -->
         <article class="entregable">
+          <div class="entregable__lead">
+            <header class="entregable__head">
+              <span class="entregable__id">02</span>
+              <h3>Exportador CNC personalizado</h3>
+            </header>
+            <p class="entregable__desc">Conexión directa entre tu modelo digital y tu maquinaria específica. Sin pasos intermedios, sin software de terceros, sin conversión manual.</p>
+          </div>
           <div class="entregable__diag">
             <svg class="diag" viewBox="0 0 320 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <rect class="diag__node" x="8" y="36" width="72" height="48"/>
@@ -2173,11 +2167,6 @@
             </svg>
           </div>
           <div class="entregable__body">
-            <header class="entregable__head">
-              <span class="entregable__id">02</span>
-              <h3>Exportador CNC personalizado</h3>
-            </header>
-            <p class="entregable__desc">Conexión directa entre tu modelo digital y tu maquinaria específica. Sin pasos intermedios, sin software de terceros, sin conversión manual.</p>
             <div class="entregable__case">
               <span class="entregable__case-label">Caso típico</span>
               <p>En lugar de contratar RhinoCAM u otro software genérico, construimos el exportador exacto que tu máquina y tu proceso necesitan.</p>
@@ -2188,6 +2177,13 @@
 
         <!-- 03 — Plugin Revit -->
         <article class="entregable">
+          <div class="entregable__lead">
+            <header class="entregable__head">
+              <span class="entregable__id">03</span>
+              <h3>Plugin Revit a medida</h3>
+            </header>
+            <p class="entregable__desc">Automatización de tareas repetitivas dentro de Revit — desde generación de planos hasta exportación de datos y validación de modelos.</p>
+          </div>
           <div class="entregable__diag">
             <svg class="diag" viewBox="0 0 320 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <rect class="diag__node" x="8" y="36" width="72" height="48"/>
@@ -2206,11 +2202,6 @@
             </svg>
           </div>
           <div class="entregable__body">
-            <header class="entregable__head">
-              <span class="entregable__id">03</span>
-              <h3>Plugin Revit a medida</h3>
-            </header>
-            <p class="entregable__desc">Automatización de tareas repetitivas dentro de Revit — desde generación de planos hasta exportación de datos y validación de modelos.</p>
             <div class="entregable__case">
               <span class="entregable__case-label">Caso típico</span>
               <p>Procesos que hoy se hacen manualmente en cada proyecto y deberían correr solos.</p>
@@ -2219,8 +2210,15 @@
           </div>
         </article>
 
-        <!-- 04 — Nesting (destacado) -->
-        <article class="entregable entregable--feature">
+        <!-- 04 — Nesting -->
+        <article class="entregable">
+          <div class="entregable__lead">
+            <header class="entregable__head">
+              <span class="entregable__id">04</span>
+              <h3>Sistema de nesting automático</h3>
+            </header>
+            <p class="entregable__desc">Geometría variable como input, archivo de máquina como output. Sin recalcular manualmente en cada pieza.</p>
+          </div>
           <div class="entregable__diag">
             <div class="nesting-compare">
               <div class="nesting-compare__col nesting-compare__col--before">
@@ -2259,12 +2257,6 @@
             </div>
           </div>
           <div class="entregable__body">
-            <header class="entregable__head">
-              <span class="entregable__id entregable__id--accent">04</span>
-              <h3>Sistema de nesting automático</h3>
-              <span class="entregable__feature-tag">CASO DESTACADO</span>
-            </header>
-            <p class="entregable__desc">Geometría variable como input, archivo de máquina como output. Sin recalcular manualmente en cada pieza.</p>
             <div class="entregable__case">
               <span class="entregable__case-label">Caso típico</span>
               <p>Producción con materiales de dimensiones variables donde el nesting se rehace a mano en cada corte.</p>
@@ -2275,6 +2267,13 @@
 
         <!-- 05 — QA BIM -->
         <article class="entregable">
+          <div class="entregable__lead">
+            <header class="entregable__head">
+              <span class="entregable__id">05</span>
+              <h3>QA automatizado de modelos BIM</h3>
+            </header>
+            <p class="entregable__desc">Validación automática del modelo contra los estándares de tu empresa antes de que el error llegue a obra o a producción.</p>
+          </div>
           <div class="entregable__diag">
             <svg class="diag" viewBox="0 0 320 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <rect class="diag__node" x="8" y="36" width="72" height="48"/>
@@ -2291,11 +2290,6 @@
             </svg>
           </div>
           <div class="entregable__body">
-            <header class="entregable__head">
-              <span class="entregable__id">05</span>
-              <h3>QA automatizado de modelos BIM</h3>
-            </header>
-            <p class="entregable__desc">Validación automática del modelo contra los estándares de tu empresa antes de que el error llegue a obra o a producción.</p>
             <div class="entregable__case">
               <span class="entregable__case-label">Caso típico</span>
               <p>Revisión manual que toma horas y depende de que alguien lo haga bien cada vez.</p>
@@ -2306,6 +2300,13 @@
 
         <!-- 06 — Integración -->
         <article class="entregable">
+          <div class="entregable__lead">
+            <header class="entregable__head">
+              <span class="entregable__id">06</span>
+              <h3>Integración entre sistemas</h3>
+            </header>
+            <p class="entregable__desc">Conectamos tu stack de software para que la información fluya sin traspasos manuales — desde el modelo hasta producción o gestión.</p>
+          </div>
           <div class="entregable__diag">
             <svg class="diag" viewBox="0 0 320 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <rect class="diag__node" x="8" y="36" width="60" height="48"/>
@@ -2324,11 +2325,6 @@
             </svg>
           </div>
           <div class="entregable__body">
-            <header class="entregable__head">
-              <span class="entregable__id">06</span>
-              <h3>Integración entre sistemas</h3>
-            </header>
-            <p class="entregable__desc">Conectamos tu stack de software para que la información fluya sin traspasos manuales — desde el modelo hasta producción o gestión.</p>
             <div class="entregable__case">
               <span class="entregable__case-label">Caso típico</span>
               <p>Un cambio en BIM se refleja automáticamente en CAM, en planillas de corte y en sistemas de producción.</p>
