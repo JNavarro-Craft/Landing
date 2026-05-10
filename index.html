@@ -1347,6 +1347,154 @@
       color: var(--cs-orange);
     }
 
+    .contacto__form-success {
+      max-width: 32rem;
+      margin: 0 0 clamp(1.5rem, 3vw, 2rem);
+      padding: 1rem 1.15rem 1rem 1.25rem;
+      border-left: 2px solid var(--cs-orange);
+      background: rgba(245, 168, 0, 0.12);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--cs-light);
+    }
+    .contacto__form-success[hidden] {
+      display: none !important;
+    }
+
+    .contacto__form {
+      max-width: 32rem;
+      margin: 0 0 clamp(1.25rem, 2.5vw, 1.75rem);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1.15rem, 2vw, 1.45rem);
+    }
+    .contacto__form[hidden] {
+      display: none !important;
+    }
+    .contacto__honeypot {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .contacto__field-label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .contacto__field-label .req {
+      color: var(--cs-orange);
+      font-weight: 700;
+      margin-left: 4px;
+    }
+    .contacto__field {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--cs-white);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--cs-mid);
+      border-radius: 0;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .contacto__field::placeholder {
+      color: rgba(220, 232, 236, 0.45);
+    }
+    .contacto__field:focus {
+      outline: none;
+      border-color: var(--cs-orange);
+      box-shadow: 0 0 0 1px var(--cs-orange);
+    }
+    textarea.contacto__field {
+      min-height: 128px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    select.contacto__field {
+      cursor: pointer;
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, var(--cs-mid) 50%), linear-gradient(135deg, var(--cs-mid) 50%, transparent 50%);
+      background-position: calc(100% - 18px) calc(50% + 3px), calc(100% - 13px) calc(50% + 3px);
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      padding-right: 36px;
+    }
+    /* Lista nativa del select: fondo claro del SO; sin esto hereda texto blanco y no se leen las opciones. */
+    select.contacto__field option,
+    select.contacto__field optgroup {
+      color: var(--cs-text);
+      background-color: var(--cs-white);
+    }
+    select.contacto__field option:disabled {
+      color: var(--cs-mid);
+      background-color: var(--cs-paper);
+    }
+    .contacto__checks {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+    .contacto__checks-legend {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cs-mid);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .contacto__check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--cs-light);
+      line-height: 1.35;
+    }
+    .contacto__check input {
+      margin: 3px 0 0;
+      width: 15px;
+      height: 15px;
+      accent-color: var(--cs-orange);
+      flex-shrink: 0;
+    }
+    button.contacto__submit.nav__cta {
+      cursor: pointer;
+      align-self: flex-start;
+      margin-top: 4px;
+      border-radius: 0;
+      font-family: var(--mono);
+    }
+
+    .contacto__mailto-intro {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--cs-mid);
+      margin: clamp(1.5rem, 3vw, 2rem) 0 10px;
+      line-height: 1.45;
+    }
+    .contacto__email--secondary {
+      margin-bottom: 0;
+    }
+
     .contacto__email {
       display: inline-flex;
       align-items: baseline;
@@ -1753,8 +1901,8 @@
       <span class="manifesto__num">— TESIS</span>
       <div>
         <p class="manifesto__quote">
-          No adaptamos nuestro proceso a las herramientas disponibles.<br/>
-          <em>Desarrollamos las herramientas que el proceso necesita.</em>
+          No adaptamos tu proceso a las herramientas disponibles.<br/>
+          <em>Desarrollamos las herramientas que tu proceso necesita.</em>
         </p>
         <span class="manifesto__attr">— Crafting Systems</span>
       </div>
@@ -1832,7 +1980,7 @@
             <span class="problema__num">05 / 05</span>
             <div class="problema__head">
               <h3>Brecha entre dominio AEC y software engineering</h3>
-              <p>Hay usuarios avanzados de BIM/CAD y hay developers de software, pero casi nadie combina ambas capacidades con la profundidad necesaria para construir sistemas de producción.</p>
+              <p>Hay equipos que modelan bien en SketchUp o AutoCAD pero no saben cómo dar el salto hacia flujos integrados con BIM, CNC o fabricación digital. El conocimiento técnico existe — falta el puente entre el software que usan hoy y el sistema que necesitan mañana.</p>
             </div>
             <div class="problema__example">
               <span class="problema__example-label">Brecha</span>
@@ -2009,7 +2157,7 @@
               <span class="mercado__id">M—03</span>
             </header>
             <h3>Constructoras y oficinas técnicas</h3>
-            <p class="mercado__desc">Equipos que gestionan modelos, coordinación y documentación técnica. La calidad del entregable depende de procesos manuales propensos a error.</p>
+            <p class="mercado__desc">Equipos que gestionan modelos, coordinación y documentación técnica. La calidad del entregable depende de procesos manuales propensos a error. También trabajamos con equipos que usan SketchUp y quieren migrar hacia flujos más robustos y conectados.</p>
             <ul class="mercado__tags">
               <li>Coordinación BIM</li>
               <li>QA / QC</li>
@@ -2275,7 +2423,71 @@
           </div>
         </header>
 
-        <a href="#" class="contacto__email email-link"><span class="arrow">→</span> jnavarro@crafting-systems.com</a>
+        <!-- Tras envío Netlify: en el panel del formulario configurar redirección a esta URL con ?sent=1 -->
+        <p id="contacto-form-success" class="contacto__form-success" hidden>Recibimos tu consulta. Te respondemos en menos de 48 horas.</p>
+
+        <form id="contacto-form"
+          class="contacto__form"
+          name="contacto"
+          method="POST"
+          action="/?sent=1#contacto"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field">
+
+          <input type="hidden" name="form-name" value="contacto">
+
+          <p class="contacto__honeypot">
+            <label>Omitir si eres humano: <input name="bot-field" type="text" autocomplete="off" tabindex="-1" /></label>
+          </p>
+
+          <div>
+            <label class="contacto__field-label" for="contacto-nombre">Nombre<span class="req" aria-hidden="true">*</span></label>
+            <input id="contacto-nombre" class="contacto__field" type="text" name="nombre" placeholder="Tu nombre" required autocomplete="name" />
+          </div>
+
+          <div>
+            <label class="contacto__field-label" for="contacto-email">Email<span class="req" aria-hidden="true">*</span></label>
+            <input id="contacto-email" class="contacto__field" type="email" name="email" placeholder="tu@empresa.com" required autocomplete="email" />
+          </div>
+
+          <div>
+            <label class="contacto__field-label" for="contacto-empresa">Empresa</label>
+            <input id="contacto-empresa" class="contacto__field" type="text" name="empresa" placeholder="Nombre de tu empresa" autocomplete="organization" />
+          </div>
+
+          <div>
+            <label class="contacto__field-label" for="contacto-industria">Industria<span class="req" aria-hidden="true">*</span></label>
+            <select id="contacto-industria" class="contacto__field" name="industria" required>
+              <option value="" disabled selected>Selecciona tu industria</option>
+              <option value="Fabricación digital / Taller CNC">Fabricación digital / Taller CNC</option>
+              <option value="Industrialización y prefabricación">Industrialización y prefabricación</option>
+              <option value="Constructora">Constructora</option>
+              <option value="Oficina de arquitectura o ingeniería">Oficina de arquitectura o ingeniería</option>
+              <option value="Otra">Otra</option>
+            </select>
+          </div>
+
+          <fieldset class="contacto__checks">
+            <legend class="contacto__checks-legend">Software que usan</legend>
+            <label class="contacto__check"><input type="checkbox" name="software" value="Rhino" /> Rhino</label>
+            <label class="contacto__check"><input type="checkbox" name="software" value="Grasshopper" /> Grasshopper</label>
+            <label class="contacto__check"><input type="checkbox" name="software" value="Revit" /> Revit</label>
+            <label class="contacto__check"><input type="checkbox" name="software" value="AutoCAD" /> AutoCAD</label>
+            <label class="contacto__check"><input type="checkbox" name="software" value="SketchUp" /> SketchUp</label>
+            <label class="contacto__check"><input type="checkbox" name="software" value="No tenemos software especializado" /> No tenemos software especializado</label>
+            <label class="contacto__check"><input type="checkbox" name="software" value="Otro" /> Otro</label>
+          </fieldset>
+
+          <div>
+            <label class="contacto__field-label" for="contacto-proceso">¿Qué proceso te genera fricción?<span class="req" aria-hidden="true">*</span></label>
+            <textarea id="contacto-proceso" class="contacto__field" name="proceso_friccion" placeholder="Describe brevemente el problema o el proceso que quieres mejorar" required rows="5"></textarea>
+          </div>
+
+          <button type="submit" class="nav__cta contacto__submit">Enviar consulta →</button>
+        </form>
+
+        <p class="contacto__mailto-intro">O escríbenos directamente a</p>
+        <a href="#" class="contacto__email contacto__email--secondary email-link"><span class="arrow">→</span> jnavarro@crafting-systems.com</a>
 
         <dl class="contacto__meta">
           <div>
@@ -2357,6 +2569,14 @@
           link.textContent = email;
         }
       });
+
+      if (new URLSearchParams(window.location.search).get('sent') === '1') {
+        var okEl = document.getElementById('contacto-form-success');
+        var formEl = document.getElementById('contacto-form');
+        if (okEl) okEl.hidden = false;
+        if (formEl) formEl.hidden = true;
+        history.replaceState(null, '', window.location.pathname + '#contacto');
+      }
     });
   </script>
   <script>
