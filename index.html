@@ -1171,13 +1171,6 @@
       display: block;
       overflow: visible;
     }
-    .entregable__diag .nesting-compare {
-      flex: 1 1 auto;
-      align-self: stretch;
-      width: 100%;
-      min-height: 0;
-      min-width: 0;
-    }
     .diag__node {
       fill: var(--cs-white);
       stroke: var(--cs-dark);
@@ -1285,64 +1278,6 @@
       font-weight: 600;
       text-transform: uppercase;
     }
-
-    /* Una columna: cada diagrama usa todo el ancho de la card (meet ya no queda limitado por mitades estrechas). */
-    .nesting-compare {
-      display: grid;
-      grid-template-columns: 1fr;
-      align-items: stretch;
-      gap: clamp(1rem, 2vw, 1.35rem);
-      width: 100%;
-      height: 100%;
-      min-height: 0;
-    }
-    .nesting-compare__col {
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-      padding: clamp(14px, 2vw, 20px) clamp(16px, 2.5vw, 24px);
-      background: var(--cs-white);
-      border: 1px solid var(--cs-rule);
-    }
-    .nesting-compare__col--after {
-      background: #FFF7E6;
-      border-color: var(--cs-orange);
-    }
-    .nesting-compare__col svg {
-      width: 100%;
-      height: auto;
-      flex: 0 0 auto;
-      min-height: clamp(130px, 26vw, 210px);
-      max-height: none;
-      overflow: visible;
-      display: block;
-    }
-    .nesting-compare__col svg .diag__t {
-      font-size: 11px;
-      letter-spacing: 0.06em;
-    }
-    .nesting-compare__col svg .diag__s {
-      font-size: 10px;
-      letter-spacing: 0.03em;
-    }
-    .nesting-compare__col svg .diag__arrow,
-    .nesting-compare__col svg .diag__arrow-h {
-      stroke-width: 2;
-    }
-    .nesting-compare__col svg .diag__arrow--dashed {
-      stroke-width: 1.75;
-    }
-    .nesting-compare__label {
-      display: block;
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      color: var(--cs-mid);
-      margin-bottom: 8px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    .nesting-compare__label--after { color: var(--cs-orange2); }
 
     @media (max-width: 980px) {
       .entregables { grid-template-columns: repeat(2, 1fr); }
@@ -2241,41 +2176,19 @@
             <p class="entregable__desc">Geometría variable como input, archivo de máquina como output. Sin recalcular manualmente en cada pieza.</p>
           </div>
           <div class="entregable__diag">
-            <div class="nesting-compare">
-              <div class="nesting-compare__col nesting-compare__col--before">
-                <span class="nesting-compare__label">Antes</span>
-                <svg viewBox="4 22 192 62" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-                  <rect class="diag__node" x="6" y="30" width="60" height="30"/>
-                  <text class="diag__t" x="36" y="48" text-anchor="middle">GEOMETRÍA</text>
-                  <text class="diag__s" x="36" y="58" text-anchor="middle">variable</text>
-                  <path class="diag__arrow diag__arrow--dashed" d="M68 45 Q 80 45 92 45"/>
-                  <g class="manual-loop">
-                    <circle cx="104" cy="45" r="14" fill="none" stroke="#7B9AA8" stroke-width="1.25" stroke-dasharray="2 2"/>
-                    <text class="diag__t" x="104" y="48" text-anchor="middle" fill="#7B9AA8">manual</text>
-                  </g>
-                  <path class="diag__arrow diag__arrow--dashed" d="M118 45 Q 130 45 142 45"/>
-                  <rect class="diag__node" x="144" y="30" width="50" height="30" stroke="#7B9AA8"/>
-                  <text class="diag__t" x="169" y="48" text-anchor="middle" fill="#7B9AA8">máquina</text>
-                  <text class="diag__s" x="100" y="78" text-anchor="middle" fill="#7B9AA8">horas perdidas por cada pieza</text>
-                </svg>
-              </div>
-              <div class="nesting-compare__col nesting-compare__col--after">
-                <span class="nesting-compare__label nesting-compare__label--after">Después</span>
-                <svg viewBox="4 20 192 64" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-                  <rect class="diag__node" x="6" y="30" width="50" height="30"/>
-                  <text class="diag__t" x="31" y="48" text-anchor="middle">DIM.</text>
-                  <text class="diag__s" x="31" y="58" text-anchor="middle">input</text>
-                  <path class="diag__arrow" d="M58 45 L82 45"/><path class="diag__arrow-h" d="M76 41 L84 45 L76 49"/>
-                  <rect class="diag__node diag__node--accent" x="86" y="24" width="58" height="42"/>
-                  <text class="diag__t diag__t--accent" x="115" y="43" text-anchor="middle">SISTEMA</text>
-                  <text class="diag__s diag__s--accent" x="115" y="56" text-anchor="middle">nesting CS</text>
-                  <path class="diag__arrow" d="M146 45 L168 45"/><path class="diag__arrow-h" d="M162 41 L170 45 L162 49"/>
-                  <rect class="diag__node" x="172" y="30" width="24" height="30"/>
-                  <text class="diag__t diag__t--accent" x="184" y="50" text-anchor="middle">CNC</text>
-                  <text class="diag__s diag__s--accent" x="100" y="78" text-anchor="middle">archivo listo para cortar</text>
-                </svg>
-              </div>
-            </div>
+            <svg class="diag" viewBox="0 0 320 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <rect class="diag__node" x="8" y="36" width="72" height="48"/>
+              <text class="diag__t" x="44" y="58" text-anchor="middle">GEOMETRÍA</text>
+              <text class="diag__s" x="44" y="72" text-anchor="middle">variable</text>
+              <path class="diag__arrow" d="M84 60 L122 60"/><path class="diag__arrow-h" d="M116 56 L124 60 L116 64"/>
+              <rect class="diag__node diag__node--accent" x="126" y="30" width="68" height="60"/>
+              <text class="diag__t diag__t--accent" x="160" y="58" text-anchor="middle">NESTING</text>
+              <text class="diag__s diag__s--accent" x="160" y="72" text-anchor="middle">automatizado</text>
+              <path class="diag__arrow" d="M198 60 L236 60"/><path class="diag__arrow-h" d="M230 56 L238 60 L230 64"/>
+              <rect class="diag__node" x="240" y="36" width="72" height="48"/>
+              <text class="diag__t" x="276" y="58" text-anchor="middle">ARCHIVO</text>
+              <text class="diag__s" x="276" y="72" text-anchor="middle">CNC</text>
+            </svg>
           </div>
           <div class="entregable__body">
             <div class="entregable__case">
