@@ -453,7 +453,11 @@
       pointer-events: none;
       z-index: 3;
     }
-    .schematic__ref--br { bottom: 46px; right: 12px; }
+    /* Esquina inferior del panel (zona de padding), debajo del pie — evita solaparse con DESPUÉS */
+    .schematic__ref--br {
+      bottom: clamp(10px, 1.5vw, 14px);
+      right: clamp(10px, 1.5vw, 14px);
+    }
 
     .schematic__body {
       flex: 1;
@@ -619,12 +623,17 @@
       display: flex;
       justify-content: space-between;
       gap: 1rem;
+      align-items: flex-start;
       font-family: var(--mono);
       font-size: 9.5px;
       letter-spacing: 0.08em;
       color: var(--cs-text-2);
       position: relative;
-      z-index: 2;
+      z-index: 4;
+    }
+    .schematic__foot > span:last-child {
+      min-width: 0;
+      text-align: right;
     }
     .schematic__foot strong { color: var(--cs-dark); font-weight: 600; }
 
