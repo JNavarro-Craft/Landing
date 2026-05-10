@@ -2275,9 +2275,7 @@
           </div>
         </header>
 
-        <a class="contacto__email" href="/cdn-cgi/l/email-protection#5e787d6f6e6865787d6f6f6e65787d676965787d6f6f6665787d676965787d6f6f6a65787d6f6f6a65787d6f6f6f65787d686a65787d676765787d6f6f6a65787d676965787d6f6e6c65787d6f6f6865787d6f6e6b65787d6f6f6e65787d6f6e6d65787d6a6b65787d6f6f6b65787d6f6c6f65787d6f6f6b65787d6f6f6865787d6f6e6f65787d6f6e6765787d6f6f6b65787d6a6865787d676765787d6f6f6f65787d6f6e6765">
-          <span class="arrow">→</span> &#106;&#110;&#97;&#118;&#97;&#114;&#114;&#111;&#64;&#99;&#114;&#97;&#102;&#116;&#105;&#110;&#103;&#45;&#115;&#121;&#115;&#116;&#101;&#109;&#115;&#46;&#99;&#111;&#109;
-        </a>
+        <a href="#" class="contacto__email email-link"><span class="arrow">→</span> jnavarro@crafting-systems.com</a>
 
         <dl class="contacto__meta">
           <div>
@@ -2336,12 +2334,32 @@
     <div class="wrap">
       <div class="footer__inner">
         <span>© 2026 Crafting Systems</span>
-        <span><a href="/cdn-cgi/l/email-protection#89afaab8b9bfb2afaab8b8b9b2afaab0beb2afaab8b8b1b2afaab0beb2afaab8b8bdb2afaab8b8bdb2afaab8b8b8b2afaabfbdb2afaab0b0b2afaab8b8bdb2afaab0beb2afaab8b9bbb2afaab8b8bfb2afaab8b9bcb2afaab8b8b9b2afaab8b9bab2afaabdbcb2afaab8b8bcb2afaab8bbb8b2afaab8b8bcb2afaab8b8bfb2afaab8b9b8b2afaab8b9b0b2afaab8b8bcb2afaabdbfb2afaab0b0b2afaab8b8b8b2afaab8b9b0b2">&#106;&#110;&#97;&#118;&#97;&#114;&#114;&#111;&#64;&#99;&#114;&#97;&#102;&#116;&#105;&#110;&#103;&#45;&#115;&#121;&#115;&#116;&#101;&#109;&#115;&#46;&#99;&#111;&#109;</a></span>
+        <span><a href="#" class="email-link">jnavarro@crafting-systems.com</a></span>
       </div>
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = 'jnavarro';
+      var domain = 'crafting-systems.com';
+      var email = user + '@' + domain;
+      var links = document.querySelectorAll('.email-link');
+      links.forEach(function (link) {
+        link.href = 'mailto:' + email;
+        var arrow = link.querySelector('.arrow');
+        if (arrow) {
+          arrow.remove();
+          link.textContent = '';
+          link.appendChild(arrow);
+          link.appendChild(document.createTextNode(' ' + email));
+        } else {
+          link.textContent = email;
+        }
+      });
+    });
+  </script>
+  <script>
     // Reveal on scroll
     (function () {
       var els = document.querySelectorAll(".reveal");
@@ -2360,11 +2378,11 @@
       els.forEach(function (el) { io.observe(el); });
     })();
 
-    // Smooth anchor
+    // Smooth anchor (ignorar mailto y enlaces solo "#")
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener("click", function (e) {
         var id = this.getAttribute("href");
-        if (!id || id === "#") return;
+        if (!id || id === "#" || id.indexOf("mailto:") === 0) return;
         var t = document.querySelector(id);
         if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); }
       });
