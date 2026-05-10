@@ -442,23 +442,6 @@
       overflow: hidden;
     }
 
-    .schematic__ref {
-      position: absolute;
-      font-family: var(--mono);
-      font-size: 8px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--cs-mid);
-      opacity: 0.72;
-      pointer-events: none;
-      z-index: 3;
-    }
-    /* Esquina inferior del panel (zona de padding), debajo del pie — evita solaparse con DESPUÉS */
-    .schematic__ref--br {
-      bottom: clamp(10px, 1.5vw, 14px);
-      right: clamp(10px, 1.5vw, 14px);
-    }
-
     .schematic__body {
       flex: 1;
       position: relative;
@@ -1807,7 +1790,6 @@
       <!-- ============== SCHEMATIC ============== -->
       <div class="hero__col-r reveal">
         <figure class="schematic" aria-label="Topología del sistema diseño–fabricación">
-          <span class="schematic__ref schematic__ref--br" aria-hidden="true">CS-26-001</span>
           <div class="schematic__body">
             <!-- Nodo 1: Diseño -->
             <article class="node node--design">
