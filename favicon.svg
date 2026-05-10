@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="4" fill="#3D5059"/>
-  <path fill="#F5A800" d="M8 11h6v2H10v6h4v2H8V11zm10 0h8v2h-6v3h5v2h-5v3h6v2h-8V11z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 31 31">
+  <!-- Igual que .brand__mark: ::after translate(5px,5px); ::before border 1.5px var(--cs-dark) -->
+  <rect x="-2" y="-2" width="31" height="31" fill="#FAFAF7"/>
+  <rect x="5" y="5" width="22" height="22" fill="#F5A800"/>
+  <rect x="0" y="0" width="22" height="22" fill="none" stroke="#3D5059" stroke-width="1.5"/>
 </svg>
